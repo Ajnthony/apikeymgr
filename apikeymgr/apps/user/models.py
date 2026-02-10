@@ -27,6 +27,14 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    PLAN_FREE = "free"
+    PLAN_PRO = "pro"
+
+    PLAN_CHOICES = (
+        (PLAN_FREE, "free"),
+        (PLAN_PRO, "pro"),
+    )
+
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True, editable=False
     )
@@ -35,6 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("Email address"), unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_suspended = models.BooleanField(default=False)
+    plan = models.CharField(max_length=20, choices=PLAN_CHOICES, default=PLAN_FREE)
 
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
