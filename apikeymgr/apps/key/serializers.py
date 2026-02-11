@@ -20,7 +20,7 @@ class APIKeySerializer(ModelSerializer):
             "last_used_at",
         )
 
-        readonly_fields = (
+        read_only_fields = (
             "id",
             "api_key_hash",
             "user",
