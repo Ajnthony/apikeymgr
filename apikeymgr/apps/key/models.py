@@ -12,6 +12,8 @@ class APIKey(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     is_active = models.BooleanField(default=True)
+    daily_use_count = models.IntegerField(default=0)
+    total_use_count = models.IntegerField(default=0)
     revoked_at = models.DateTimeField(default=None, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_used_at = models.DateTimeField(auto_now=True)
