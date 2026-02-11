@@ -13,7 +13,6 @@ class UserAdmin(BaseUserAdmin):
         "email",
         "created_at",
         "updated_at",
-        "is_active",
         "is_suspended",
         "plan",
     )
@@ -45,8 +44,6 @@ class UserAdmin(BaseUserAdmin):
                     "created_at",
                     "updated_at",
                     "is_superuser",
-                    "is_staff",
-                    "is_active",
                 )
             },
         ),

@@ -8,7 +8,7 @@ urlpatterns = [
         "",
         include(
             [
-                path("/", GetAPIKeysView.as_view(), name="get-api-keys"),
+                path("", GetAPIKeysView.as_view(), name="get-api-keys"),
                 path("<str:pk>/", UseAPIKeyView.as_view(), name="use-api-key"),
             ]
         ),
