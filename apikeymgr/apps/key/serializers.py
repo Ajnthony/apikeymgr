@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from models import APIKey
+from .models import APIKey
 from user.serializers import UserSerializer
 
 
