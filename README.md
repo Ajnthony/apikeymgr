@@ -4,7 +4,9 @@ This is an API key manager built with Python/Django, which can create, rotate, a
 
 # What this does
 
-This API will perform basic CRUD operation, and will also manage the auto-rotation of existing API keys for security purpose. It goes without saying that the signed in user can interact with the API keys they own only...
+This API will perform basic CRUD operation for the API keys that users can use\* and will also manage the auto-rotation of existing API keys for security purpose.
+
+\* actually they cannot; it's just a random string.
 
 ## Object model
 
@@ -13,10 +15,12 @@ This API will perform basic CRUD operation, and will also manage the auto-rotati
 ```
 {
   id
-  api_key
+  api_key_hash
   name
   user
   is_active
+  daily_use_count
+  total_use_count
   revoked_at
   created_at
   last_used_at
@@ -25,10 +29,12 @@ This API will perform basic CRUD operation, and will also manage the auto-rotati
 ```
 
 `id`: id\
-`api_key`: the API will generate a new API key for use and hash it before saving it to DB. All the API keys will be stored AFTER hash; no original api key in the DB.\
+`api_key_hash`: the API will generate a new API key for use and hash it before saving it to DB. All the API keys will be stored AFTER hash; no original api key in the DB.\
 `name`: name of the API key for easier reference (optional)\
 `user`: owner of the API key
 `is_active`: a boolean that indicates whether the API key is active or not\
+`daily_use_count`: how many times was this key used today?\
+`total_use_count`: how many times was this key used since its creation?\
 `revoked_at`: timestamp when the API key was revoked (1st DELETE request). If the API key becomes active again then this should be `None`\
 `created_at`: timestamp auto-generated at the time of creation\
 `last_used_at`: timestamp auto-generated at the time of the most recent usage\
@@ -43,7 +49,9 @@ This API will perform basic CRUD operation, and will also manage the auto-rotati
     username
     email
     plan
-    is_blocked
+    created_at
+    updated_at
+    is_suspended
 
     # built-in fields
     is_active
@@ -57,7 +65,9 @@ This API will perform basic CRUD operation, and will also manage the auto-rotati
 `username`: username (optional, unique)\
 `email`: user's email; they will log in with this (unique)\
 `plan`: depending on the plan, users will have different rate limits\
-`is_blocked`: for easier user control - `False` by default. in case a user appears to be spamming, this can be set to `True` instead of revoking all their API keys
+`created_at`: timestamp at the time of user creation\
+`updated_at`: timestamp at times of user update - plan change, for example
+`is_suspended`: for easier user control - `False` by default. in case a user appears to be spamming, this can be set to `True` instead of revoking all their API keys
 
 ## API Endpoints
 
@@ -67,20 +77,28 @@ Retrieve all API keys the authenticated user owns
 
 ### POST key/
 
-Generate a new API key
+Generate a new API key for the signed in user
 
 ### GET key/key_id/
 
-Retrieve an API key by id
+Retrieve an API key by id (signed user only, and only one of the keys they own)
 
-### PATCH key/key_id/
+### PATCH key/key_id/update/
 
-Update the name for the API key
+Update the name for the API key (signed user only, and only one of the keys they own)
+
+### PATCH key/key_id/call/
+
+Simulate the key usage, so its count values will be incremented (signed user only, and only one of the keys they own)
+
+### PATCH key/key_id/delete/
+
+1st hit will be a "soft delete", which will just set `is_active` to `False`.\
+2nd hit will actually remove the API key from the DB. (signed user only, and only one of the keys they own)
 
 ### DELETE key/key_id/
 
-1st hit will be a "soft delete", which will just set `is_active` to `False`.\
-2nd hit will actually remove the API key from the DB.
+(ADMIN) removes a key instantly
 
 ### API Key Rotation
 
