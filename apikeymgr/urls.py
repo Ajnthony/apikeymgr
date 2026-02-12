@@ -5,15 +5,22 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 urlpatterns = [
     # admin page
+    # srv/admin/
     path("admin/", admin.site.urls),
     path(
         "api/",
         include(
             [
                 # drf-spectacular
+                # srv/api/schema/...
                 path(
                     "schema/",
                     include(
@@ -34,7 +41,30 @@ urlpatterns = [
                         ]
                     ),
                 ),
+                # JWT token
+                # srv/api/token/...
+                path(
+                    "token/",
+                    include(
+                        [
+                            path(
+                                "", TokenObtainPairView.as_view(), name="token-obtain"
+                            ),
+                            path(
+                                "refresh/",
+                                TokenRefreshView.as_view(),
+                                name="token-refresh",
+                            ),
+                            path(
+                                "verify/",
+                                TokenVerifyView.as_view(),
+                                name="token-verify",
+                            ),
+                        ]
+                    ),
+                ),
                 # custom apps
+                # srv/api/{app_name}/...
                 path("key/", include("key.urls")),
             ]
         ),
