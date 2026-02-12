@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from .models import APIKey
 from .serializers import APIKeySerializer
 from .selectors import get_api_keys_for_current_user
-from .services import use_api_key
+from .services import use_api_key, generate_api_key
 
 
 class GetAPIKeysView(ListAPIView):
@@ -43,5 +43,25 @@ class UseAPIKeyView(UpdateAPIView):
             {
                 "message": "Successfully used API key",
                 "data": data,
+            }
+        )
+
+
+class GenerateAPIKeyView(CreateAPIView):
+    serializer_class = APIKeySerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        raw, hashed = generate_api_key()
+
+        # TODO:
+        # save hashed to DB with user id
+        # do not save raw, just show them once
+
+        return Response(
+            {
+                "message": "Successfully created API key",
+                "data_raw": raw,
+                "data_hashed": hashed,
             }
         )
