@@ -71,35 +71,51 @@ This API will perform basic CRUD operation for the API keys that users can use\*
 
 ## API Endpoints
 
-### GET key/
+### Key
+
+#### GET api/key/
 
 Retrieve all API keys the authenticated user owns
 
-### POST key/
+#### POST api/key/
 
 Generate a new API key for the signed in user
 
-### GET key/key_id/
+#### GET api/key/key_id/
 
 Retrieve an API key by id (signed user only, and only one of the keys they own)
 
-### PATCH key/key_id/update/
+#### PATCH api/key/key_id/update/
 
 Update the name for the API key (signed user only, and only one of the keys they own)
 
-### PATCH key/key_id/call/
+#### PATCH api/key/key_id/call/
 
 Simulate the key usage, so its count values will be incremented (signed user only, and only one of the keys they own)
 
-### PATCH key/key_id/delete/
+#### PATCH api/key/key_id/delete/
 
 1st hit will be a "soft delete", which will just set `is_active` to `False`.\
 2nd hit will actually remove the API key from the DB. (signed user only, and only one of the keys they own)
 
-### DELETE key/key_id/
+#### DELETE api/key/key_id/
 
 (ADMIN) removes a key instantly
 
-### API Key Rotation
+#### API Key Rotation
 
 To be added
+
+### Token
+
+#### POST api/token/
+
+generates 2 JWT tokens: 1 access and 1 refresh
+
+#### POST api/token/refresh/
+
+refresh token
+
+#### POST api/token/verify/
+
+verify token
