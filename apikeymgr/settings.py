@@ -2,6 +2,7 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -18,6 +19,11 @@ DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS_STR = os.getenv("CORS_ALLOWED_ORIGINS")
+CORS_ALLOWED_ORIGINS = (
+    CORS_ALLOWED_ORIGINS_STR.split(",") if CORS_ALLOWED_ORIGINS_STR else []
+)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -25,9 +31,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     # DRF
     "rest_framework",
     "drf_spectacular",
+    # JWT
+    "rest_framework_simplejwt",
     # custom apps
     "user",
     "key",
@@ -36,6 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -102,6 +112,7 @@ AUTH_USER_MODEL = "user.User"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
 }
@@ -111,4 +122,9 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "apikeymgr api doc",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
