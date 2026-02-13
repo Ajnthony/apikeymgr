@@ -62,3 +62,18 @@ def use_api_key(*, api_key_id):
         )
 
         return api_key_obj
+
+
+def soft_delete_api_key(*, api_key_id):
+    """deactivates the API key, only if the owner is the signed in user"""
+
+    api_key_obj = get_api_key_by_id(pk=api_key_id)
+
+    if api_key_obj["is_active"]:
+        api_key_obj["is_active"] = False
+        api_key_obj["revoked_at"] = timezone.now()
+
+        api_key_obj.save(update_fields=["is_active", "revoked_at"])
+        api_key_obj.refresh_from_db(fields=["is_active", "revoked_at"])
+
+        return api_key_obj

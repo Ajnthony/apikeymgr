@@ -8,7 +8,7 @@ class APIKey(models.Model):
         default=uuid.uuid4, primary_key=True, unique=True, editable=False
     )
     api_key_hash = models.CharField(max_length=128, unique=True, editable=False)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     is_active = models.BooleanField(default=True)
