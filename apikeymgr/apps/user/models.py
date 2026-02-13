@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 import uuid
+import random
 
 
 class UserManager(BaseUserManager):
@@ -45,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         primary_key=True, default=uuid.uuid4, unique=True, editable=False
     )
     full_name = models.CharField(max_length=50, blank=True, null=True)
-    username = models.CharField(max_length=30, unique=True, null=True, blank=True)
+    username = models.CharField(max_length=30, null=True, blank=True)
     email = models.EmailField(_("Email address"), unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -63,3 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username if self.username else self.email
+
+    def save(self, *args, **kwargs):
+        # auth generate username
+        # first part of email before @ + random 4 digit numbers from 0001-9999
+        self.username = self.email.split("@")[0] + f"{random.randint(1, 9999):04}"
+        return super(User, self).save(*args, **kwargs)
