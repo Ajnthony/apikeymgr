@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-from .models import APIKey
-from user.serializers import UserSerializer
+from apikeymgr.apps.key.models import APIKey
+from apikeymgr.apps.user.serializers import UserSerializer
 
 
 class APIKeySerializer(ModelSerializer):

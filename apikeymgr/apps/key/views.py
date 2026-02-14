@@ -6,10 +6,10 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from .models import APIKey
-from .serializers import APIKeySerializer
-from .selectors import get_api_keys_for_current_user
-from .services import use_api_key
+from apikeymgr.apps.key.models import APIKey
+from apikeymgr.apps.key.serializers import APIKeySerializer
+from apikeymgr.apps.key.selectors import get_api_keys_for_current_user
+from apikeymgr.apps.key.services import use_api_key
 
 
 class GetAPIKeysView(ListAPIView):

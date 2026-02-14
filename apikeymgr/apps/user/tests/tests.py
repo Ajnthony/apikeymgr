@@ -36,5 +36,18 @@ class APIKeyTest(TestCase):
         user_one = get_user_model().objects.get(email="user1@test.com")
         user_two = get_user_model().objects.get(email="user2@test.com")
 
+        self.assertIsNotNone(user_one.email)
+        self.assertIsNotNone(user_two.email)
+
+        self.assertEqual(user_one.is_suspended, False)
+        self.assertEqual(user_two.is_suspended, False)
+
+        self.assertEqual(user_one.is_active, True)
+        self.assertEqual(user_two.is_active, True)
+
+    def test_user_plan_match(self):
+        user_one = get_user_model().objects.get(email="user1@test.com")
+        user_two = get_user_model().objects.get(email="user2@test.com")
+
         self.assertEqual(user_one.plan, "free")
         self.assertEqual(user_two.plan, "pro")

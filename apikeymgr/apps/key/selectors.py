@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import APIKey
+from apikeymgr.apps.key.models import APIKey
 
 
 def get_api_keys_for_current_user(*, user):

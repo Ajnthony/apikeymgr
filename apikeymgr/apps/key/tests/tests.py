@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
-from .models import APIKey
+from apikeymgr.apps.key.models import APIKey
 
 
 class APIKeyTest(TestCase):

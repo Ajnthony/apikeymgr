@@ -65,7 +65,7 @@ urlpatterns = [
                 ),
                 # custom apps
                 # srv/api/{app_name}/...
-                path("key/", include("key.urls")),
+                path("key/", include("apikeymgr.apps.key.urls")),
             ]
         ),
     ),

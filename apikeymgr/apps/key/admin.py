@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import APIKey
+from apikeymgr.apps.key.models import APIKey
 
 
 class APIKeyAdmin(admin.ModelAdmin):
