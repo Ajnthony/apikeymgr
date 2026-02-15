@@ -7,14 +7,15 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 class UserAdmin(BaseUserAdmin):
     ordering = ["created_at"]
     list_display = (
-        "id",
-        "full_name",
-        "username",
         "email",
+        "username",
+        "full_name",
+        "plan",
         "created_at",
         "updated_at",
         "is_suspended",
-        "plan",
+        "is_staff",
+        "is_superuser",
     )
     readonly_fields = (
         "id",
