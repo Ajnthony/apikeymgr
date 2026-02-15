@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
 from apikeymgr.apps.key.models import APIKey
 
 
 class APIKeyTest(TestCase):
     def setUp(self):
         User = get_user_model()
+        self.client = APIClient()
 
         user_one = User.objects.create_user(
             email="user1@test.com",
