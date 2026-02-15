@@ -3,6 +3,7 @@ from rest_framework.generics import (
     CreateAPIView,
     RetrieveAPIView,
     UpdateAPIView,
+    DestroyAPIView,
 )
 from django.utils import timezone
 from datetime import timedelta
@@ -18,6 +19,7 @@ from apikeymgr.apps.key.services import (
     update_key_name,
     soft_delete_api_key,
     generate_api_key,
+    admin_delete_api_key,
 )
 from apikeymgr.apps.key.permissions import IsOwnerOrSuperUserForDelete
 
@@ -155,3 +157,16 @@ class DeactivateAPIKeyView(UpdateAPIView):
                 "message": "Unauthorised",
             }
         )
+
+
+class AdminDeleteAPIKeyView(DestroyAPIView):
+    """(admin) delete API key from DB"""
+
+    serializer_class = APIKeySerializer
+    permission_classes = [IsOwnerOrSuperUserForDelete]
+
+    def destroy(self, request, *args, **kwargs):
+        api_key_id = self.kwargs.get("pk")
+        api_key_after_deletion = admin_delete_api_key(api_key_id=api_key_id)
+
+        return Response({"message": "success", "data": api_key_after_deletion})

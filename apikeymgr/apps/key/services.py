@@ -77,3 +77,20 @@ def soft_delete_api_key(*, api_key_id):
         api_key_obj.refresh_from_db(fields=["is_active", "revoked_at"])
 
         return api_key_obj
+
+
+def admin_delete_api_key(*, api_key_id):
+    """(admin) delete API key from DB"""
+
+    api_key_obj = get_api_key_by_id(pk=api_key_id)
+
+    data_after_deletion = {
+        "id": api_key_obj.id,
+        "name": api_key_obj.name if api_key_obj.name else "",
+        "user": api_key_obj.user,
+    }
+
+    if api_key_obj:
+        api_key_obj.delete()
+
+        return data_after_deletion

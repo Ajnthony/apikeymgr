@@ -6,6 +6,7 @@ from apikeymgr.apps.key.views import (
     UpdateAPIKeyNameView,
     GenerateAPIKeyView,
     DeactivateAPIKeyView,
+    AdminDeleteAPIKeyView,
 )
 
 app_name = "key"
@@ -21,12 +22,17 @@ urlpatterns = [
                 path(
                     "<str:pk>/deactivate/",
                     DeactivateAPIKeyView.as_view(),
-                    name="delete-api-key",
+                    name="deactivate-api-key",
                 ),
                 path(
                     "<str:pk>/update-name/",
                     UpdateAPIKeyNameView.as_view(),
                     name="update-api-key-name",
+                ),
+                path(
+                    "<str:pk>/delete/",
+                    AdminDeleteAPIKeyView.as_view(),
+                    name="delete-api-key",
                 ),
                 path("", GenerateAPIKeyView.as_view(), name="generate-api-key"),
             ]
