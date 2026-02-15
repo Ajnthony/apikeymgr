@@ -1,10 +1,10 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient
+from rest_framework.test import APITestCase, APIClient
 from apikeymgr.apps.key.models import APIKey
 
 
-class APIKeyTest(TestCase):
+class APIKeyTest(APITestCase):
     def setUp(self):
         User = get_user_model()
         self.client = APIClient()
@@ -51,6 +51,7 @@ class APIKeyTest(TestCase):
         self.assertEqual(user_two_key.revoked_at, None)
 
     def test_soft_delete_should_return_401_for_anonymous(self):
+        # intentional no sign in
         response = self.client.patch("/api/key/1/deactivate/")
         status_code = response.status_code
         self.assertEqual(status_code, 401)
