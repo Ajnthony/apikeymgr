@@ -1,4 +1,3 @@
-from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 
@@ -9,26 +8,16 @@ class APIKeyTest(APITestCase):
         self.client = APIClient()
 
         User.objects.create_user(
-            # id=1,
-            # full_name="",
-            # username="user19345",
             email="user1@test.com",
             password="1234",
-            # created_at=timezone.now,
-            # updated_at=None,
             plan="free",
             is_suspended=False,
             is_staff=False,
             is_active=True,
         )
         User.objects.create_user(
-            # id=2,
-            # full_name="",
-            # username="user23257",
             email="user2@test.com",
             password="1234",
-            # created_at=timezone.now,
-            # updated_at=None,
             plan="pro",
             is_suspended=False,
             is_staff=False,
