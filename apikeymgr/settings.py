@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = os.path.dirname(__file__)
 
 # to use apps/ folder
-sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
+# sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     # JWT
     "rest_framework_simplejwt",
     # custom apps
-    "user",
-    "key",
+    "apikeymgr.apps.user.apps.UserConfig",
+    "apikeymgr.apps.key.apps.KeyConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import (
+from apikeymgr.apps.key.views import (
     GetAPIKeysView,
     GetAPIKeyView,
     UseAPIKeyView,

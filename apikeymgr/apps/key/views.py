@@ -8,15 +8,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.utils import timezone
 from datetime import timedelta
 from rest_framework.response import Response
-from .models import APIKey
-from .serializers import APIKeySerializer
-from .selectors import get_api_keys_for_current_user, get_api_key_by_id
-from .services import (
-    use_api_key,
-    generate_api_key,
-    update_key_name,
-    soft_delete_api_key,
-)
+from apikeymgr.apps.key.models import APIKey
+from apikeymgr.apps.key.serializers import APIKeySerializer
+from apikeymgr.apps.key.selectors import get_api_keys_for_current_user
+from apikeymgr.apps.key.services import use_api_key
 
 
 def get_expiry_date_default(EXPIRY_DATE_DEFAULT_DAYS=7):

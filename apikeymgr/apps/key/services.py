@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.http.response import HttpResponse
 from django.db.models import F
-from .models import APIKey
+from apikeymgr.apps.key.models import APIKey
 from .selectors import get_api_key_by_id
 
 API_KEY_LENGTH = 32
