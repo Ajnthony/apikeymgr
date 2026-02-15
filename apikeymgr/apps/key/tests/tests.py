@@ -63,7 +63,7 @@ class APIKeyTest(APITestCase):
         status_code = response.status_code
         self.assertEqual(status_code, 401)
 
-    def test_user_delete_request_should_soft_delete(self):
+    def test_user_soft_delete(self):
         user_one = get_user_model().objects.get(email="user1@test.com")
         self.client.force_authenticate(user=user_one)
 
@@ -76,3 +76,9 @@ class APIKeyTest(APITestCase):
         # 2. check if is_active has been changed to False
         soft_deleted_key = APIKey.objects.get(id=api_key_one.id)
         self.assertFalse(soft_deleted_key.is_active)
+
+    def test_reg_user_cannot_make_delete_request(self):
+        pass
+
+    def test_admin_user_can_delete_keys(self):
+        pass
