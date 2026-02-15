@@ -47,3 +47,7 @@ class APIKeyTest(APITestCase):
     def test_incorrect_pw_should_fail_authentication(self):
         attempt = self.client.login(email="user1@test.com", password="2345")
         self.assertFalse(attempt)
+
+    def test_correct_pw_should_authenticate(self):
+        attempt = self.client.login(email="user1@test.com", password="1234")
+        self.assertTrue(attempt)

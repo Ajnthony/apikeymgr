@@ -9,8 +9,16 @@ from datetime import timedelta
 from rest_framework.response import Response
 from apikeymgr.apps.key.models import APIKey
 from apikeymgr.apps.key.serializers import APIKeySerializer
-from apikeymgr.apps.key.selectors import get_api_keys_for_current_user
-from apikeymgr.apps.key.services import use_api_key
+from apikeymgr.apps.key.selectors import (
+    get_api_keys_for_current_user,
+    get_api_key_by_id,
+)
+from apikeymgr.apps.key.services import (
+    use_api_key,
+    update_key_name,
+    soft_delete_api_key,
+    generate_api_key,
+)
 from apikeymgr.apps.key.permissions import IsOwnerOrSuperUserForDelete
 
 
@@ -42,7 +50,7 @@ class GetAPIKeyView(RetrieveAPIView):
     permission_classes = [IsOwnerOrSuperUserForDelete]
 
     def retrieve(self, request, *args, **kwargs):
-        key = get_api_key_by_id(self.kwargs.get("pk"))
+        key = get_api_key_by_id(pk=self.kwargs.get("pk"))
 
         if key.user == request.user:
             serializer = APIKeySerializer(key)
@@ -138,7 +146,7 @@ class DeactivateAPIKeyView(UpdateAPIView):
 
             return Response(
                 {
-                    "message": f"successfully deleted API key {api_key['name']}",
+                    "message": f"successfully deleted API key {api_key.name}",
                 }
             )
 
