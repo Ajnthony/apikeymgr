@@ -66,7 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username if self.username else self.email
 
     def save(self, *args, **kwargs):
-        # auth generate username
+        # auth generate username for reg users
         # first part of email before @ + random 4 digit numbers from 0001-9999
-        self.username = self.email.split("@")[0] + f"{random.randint(1, 9999):04}"
+        if not self.is_superuser or not self.is_staff:
+            self.username = self.email.split("@")[0] + f"{random.randint(1, 9999):04}"
         return super(User, self).save(*args, **kwargs)
