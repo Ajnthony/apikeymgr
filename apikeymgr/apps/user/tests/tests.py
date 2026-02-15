@@ -1,10 +1,13 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
+from rest_framework.test import APITestCase, APIClient
 
 
-class APIKeyTest(TestCase):
+class APIKeyTest(APITestCase):
     def setUp(self):
         User = get_user_model()
+        self.client = APIClient()
+
         User.objects.create_user(
             # id=1,
             # full_name="",
@@ -51,3 +54,7 @@ class APIKeyTest(TestCase):
 
         self.assertEqual(user_one.plan, "free")
         self.assertEqual(user_two.plan, "pro")
+
+    def test_incorrect_pw_should_fail_authentication(self):
+        attempt = self.client.login(email="user1@test.com", password="2345")
+        self.assertFalse(attempt)
