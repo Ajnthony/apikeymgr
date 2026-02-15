@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.http.response import HttpResponse
 from django.db.models import F
+from django.forms.models import model_to_dict
 from apikeymgr.apps.key.models import APIKey
 from .selectors import get_api_key_by_id
 
@@ -87,7 +88,7 @@ def admin_delete_api_key(*, api_key_id):
     data_after_deletion = {
         "id": api_key_obj.id,
         "name": api_key_obj.name if api_key_obj.name else "",
-        "user": api_key_obj.user,
+        "user": model_to_dict(api_key_obj.user),
     }
 
     if api_key_obj:

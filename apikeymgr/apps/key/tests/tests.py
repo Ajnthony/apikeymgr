@@ -78,7 +78,19 @@ class APIKeyTest(APITestCase):
         self.assertFalse(soft_deleted_key.is_active)
 
     def test_reg_user_cannot_make_delete_request(self):
-        pass
+        user_one = get_user_model().objects.get(email="user1@test.com")
+        self.client.force_authenticate(user=user_one)
+
+        api_key_one = APIKey.objects.filter(user=user_one).first()
+        response = self.client.delete(f"/api/key/{api_key_one.id}/delete/")
+        status_code = response.status_code
+        self.assertEqual(status_code, 403)
 
     def test_admin_user_can_delete_keys(self):
-        pass
+        user_one = get_user_model().objects.get(email="admin@test.com")
+        self.client.force_authenticate(user=user_one)
+
+        api_key_one = APIKey.objects.filter(user=user_one).first()
+        response = self.client.delete(f"/api/key/{api_key_one.id}/delete/")
+        status_code = response.status_code
+        self.assertEqual(status_code, 200)

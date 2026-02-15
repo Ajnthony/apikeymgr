@@ -164,9 +164,10 @@ class AdminDeleteAPIKeyView(DestroyAPIView):
 
     serializer_class = APIKeySerializer
     permission_classes = [IsOwnerOrSuperUserForDelete]
+    queryset = APIKey.objects.all()
 
     def destroy(self, request, *args, **kwargs):
-        api_key_id = self.kwargs.get("pk")
-        api_key_after_deletion = admin_delete_api_key(api_key_id=api_key_id)
+        api_key = self.get_object()
+        api_key_after_deletion = admin_delete_api_key(api_key_id=api_key.id)
 
         return Response({"message": "success", "data": api_key_after_deletion})
