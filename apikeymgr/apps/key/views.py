@@ -4,7 +4,6 @@ from rest_framework.generics import (
     RetrieveAPIView,
     UpdateAPIView,
 )
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.utils import timezone
 from datetime import timedelta
 from rest_framework.response import Response
@@ -12,6 +11,7 @@ from apikeymgr.apps.key.models import APIKey
 from apikeymgr.apps.key.serializers import APIKeySerializer
 from apikeymgr.apps.key.selectors import get_api_keys_for_current_user
 from apikeymgr.apps.key.services import use_api_key
+from apikeymgr.apps.key.permissions import IsOwnerOrSuperUserForDelete
 
 
 def get_expiry_date_default(EXPIRY_DATE_DEFAULT_DAYS=7):
@@ -22,7 +22,7 @@ class GetAPIKeysView(ListAPIView):
     """Get all API keys the signed in user owns"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
 
     def get_queryset(self):
         return get_api_keys_for_current_user(user=self.request.user)
@@ -39,7 +39,7 @@ class GetAPIKeyView(RetrieveAPIView):
     """Get an API key by id, only if the signed in user owns it"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
 
     def retrieve(self, request, *args, **kwargs):
         key = get_api_key_by_id(self.kwargs.get("pk"))
@@ -56,7 +56,7 @@ class UseAPIKeyView(UpdateAPIView):
     """Simulates the API key usage - just increments count fields"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
     http_method_names = ["patch"]  # no PUT
 
     def partial_update(self, request, *args, **kwargs):
@@ -78,7 +78,7 @@ class UpdateAPIKeyNameView(UpdateAPIView):
     """Change the name for the API key"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
     http_method_names = ["patch"]  # no PUT
 
     def partial_update(self, request, *args, **kwargs):
@@ -101,7 +101,7 @@ class GenerateAPIKeyView(CreateAPIView):
     """creates new API key"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
 
     def create(self, request, *args, **kwargs):
         raw, hashed = generate_api_key()
@@ -126,7 +126,7 @@ class DeactivateAPIKeyView(UpdateAPIView):
     """soft deletes an API key"""
 
     serializer_class = APIKeySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrSuperUserForDelete]
     http_method_names = ["patch"]  # no PUT
 
     def partial_update(self, request, *args, **kwargs):
