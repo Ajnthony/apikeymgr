@@ -50,15 +50,17 @@ class UserAdmin(BaseUserAdmin):
     )
 
     add_fieldsets = (
-        _("User details"),
-        {
-            "classes": ("wide"),
-            "fields": (
-                "email",
-                "password",
-                "password2",
-            ),
-        },
+        (
+            _("User details"),
+            {
+                "classes": ("wide",),  # note the comma for single-item tuple
+                "fields": (
+                    "email",
+                    "password",
+                    "password2",
+                ),
+            },
+        ),
     )
 
 
